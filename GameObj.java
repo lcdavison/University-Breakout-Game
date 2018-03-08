@@ -79,6 +79,8 @@ public class GameObj
    */
   public Colour getColour() { return colour; }
   
+  public void setColour(Colour colour) { this.colour = colour; }  
+  
   /**
    * Move object by X units
    *  The actual direction moved is flipped by changeDirectionX()

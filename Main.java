@@ -8,8 +8,8 @@
  */
 public class Main
 {
-  public static final int H = 800; // Height of window
-  public static final int W = 600; // Width of window
+  public static final int H = 720; // Height of window
+  public static final int W = 1280; // Width of window
 
   public static void main( String args[] )
   {

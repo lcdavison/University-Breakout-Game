@@ -19,7 +19,7 @@ public class Model extends Observable
   private static final float BRICK_WIDTH  = 50; // Brick size
   private static final float BRICK_HEIGHT = 30;
 
-  private static final int BAT_MOVE       = 5; // Distance to move bat
+  private static final int BAT_MOVE       = 10; // Distance to move bat
    
   // Scores
   private static final int HIT_BRICK      = 50;  // Score
@@ -38,6 +38,7 @@ public class Model extends Observable
   private final float H;         // Height of area
   
   private final int BRICKS = 10;
+  private float BallSpeedMul = 1;
 
   public Model( int width, int height )
   {
@@ -178,19 +179,23 @@ public class Model extends Observable
             // A hit on the left or right of the object
             //  has an interesting affect
     
-            boolean hit = false;
+            //boolean hit = false;
             
-            hit = checkBrickHit(x, y);
+            boolean hit = checkBrickHit(x, y);
             
             if (hit)
               ball.changeDirectionY();
     
-            if ( ball.hitBy(bat) )
-              ball.changeDirectionY();
+            if ( ball.hitBy(bat) ) 
+            {
+            	ball.changeDirectionY();
+            	ball.setColour(Colour.RandomColour(ball.getColour()));
+            }
           }
           modelChanged();      // Model changed refresh screen
           Thread.sleep( fast ? 2 : 20 );
-          ball.moveX(S);  ball.moveY(S);
+          ball.moveX(S * BallSpeedMul);  ball.moveY(S * BallSpeedMul);
+          System.out.println("BALL SPEED : " + S);
         }
       } catch (Exception e) 
       { 
@@ -206,10 +211,19 @@ public class Model extends Observable
 	  
 	  for(GameObj brick : bricks) 
 	  {
-		  if(brick.hitBy(ball) && brick.isVisible()){ brick.setVisibility(false); hit = true; }   
+		  if(brick.hitBy(ball) && brick.isVisible()){ brick.setVisibility(false); hit = true; addToScore(HIT_BRICK); BallSpeedMul += 0.1f; }   
 	  }
 	  
 	  return hit;
+  }
+  
+  private boolean EndGame() 
+  {
+	  for(GameObj brick : bricks) 
+	  {
+		  if(brick.isVisible()) return true;
+	  }
+	  return false;
   }
   
   /**
